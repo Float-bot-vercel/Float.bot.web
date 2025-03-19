@@ -1,6 +1,7 @@
 {
-  "version": 2,
-  "buildCommand": false,
-  "outputDirectory": "public",
-  "framework": "static"
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "github": {
+    "silent": true
+  }
 }

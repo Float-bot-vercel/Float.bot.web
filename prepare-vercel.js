@@ -1,31 +1,58 @@
-#!/usr/bin/env node
-
 /**
  * This script prepares the project for Vercel deployment
  * by copying the necessary static files to the deployment folder
  */
 
-import fs from 'fs';
-import path from 'path';
+const fs = require('fs');
+const path = require('path');
 
-console.log('🚀 Preparing for Vercel deployment...');
+// Function to recursively copy a directory
+function copyDirectory(source, destination) {
+  // Create destination directory if it doesn't exist
+  if (!fs.existsSync(destination)) {
+    fs.mkdirSync(destination, { recursive: true });
+  }
 
-// Create the public directory if it doesn't exist
-if (!fs.existsSync('public')) {
-  fs.mkdirSync('public', { recursive: true });
+  // Get all files in the source directory
+  const files = fs.readdirSync(source);
+
+  // Copy each file or subdirectory
+  for (const file of files) {
+    const sourcePath = path.join(source, file);
+    const destPath = path.join(destination, file);
+
+    // Get file stats
+    const stats = fs.statSync(sourcePath);
+
+    if (stats.isFile()) {
+      // Copy the file
+      fs.copyFileSync(sourcePath, destPath);
+      console.log(`Copied: ${sourcePath} -> ${destPath}`);
+    } else if (stats.isDirectory()) {
+      // Recursively copy the directory
+      copyDirectory(sourcePath, destPath);
+    }
+  }
 }
 
-// Copy the vercel.html file to index.html in the public directory
-fs.copyFileSync('vercel.html', 'public/index.html');
+// Main function to prepare files for Vercel
+function prepareForVercel() {
+  console.log('Preparing files for Vercel deployment...');
 
-// Update vercel.json to use the public directory
-const vercelConfig = {
-  "version": 2,
-  "cleanUrls": true,
-  "trailingSlash": false
-};
+  // Define source and destination directories
+  const publicDir = path.join(__dirname, 'public');
+  const vercelDir = path.join(__dirname, '.vercel_build_output', 'static');
 
-fs.writeFileSync('vercel.json', JSON.stringify(vercelConfig, null, 2));
+  // Create Vercel output directory if it doesn't exist
+  if (!fs.existsSync(vercelDir)) {
+    fs.mkdirSync(vercelDir, { recursive: true });
+  }
 
-console.log('✅ Vercel deployment preparation complete!');
-console.log('Please run `vercel --prod` to deploy your project to Vercel.');
+  // Copy public directory to Vercel output
+  copyDirectory(publicDir, vercelDir);
+
+  console.log('Preparation complete! Files are ready for Vercel deployment.');
+}
+
+// Run the preparation function
+prepareForVercel();
