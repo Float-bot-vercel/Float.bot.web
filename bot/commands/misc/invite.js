@@ -25,17 +25,17 @@ module.exports = {
         new ButtonBuilder()
           .setLabel('Add to Server')
           .setStyle(ButtonStyle.Link)
-          .setURL('https://discord.com/api/oauth2/authorize?client_id=YOUR_CLIENT_ID&permissions=8&scope=bot%20applications.commands')
+          .setURL('https://discord.com/oauth2/authorize?client_id=1351863223753904148&permissions=8&integration_type=0&scope=bot')
           .setEmoji('🤖'),
         new ButtonBuilder()
           .setLabel('Support Server')
           .setStyle(ButtonStyle.Link)
-          .setURL('https://discord.gg/your-support-server')
+          .setURL('https://discord.gg/6RXCUjgqUH')
           .setEmoji('🛠️'),
         new ButtonBuilder()
           .setLabel('Website')
           .setStyle(ButtonStyle.Link)
-          .setURL('https://your-website-url.com')
+          .setURL('https://float-bot.replit.app')
           .setEmoji('🌐')
       );
     
